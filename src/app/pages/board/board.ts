@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Navbar } from "../../components/navbar/navbar";
+import { DialogComponent } from "../../components/dialog/dialog";
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { Dialog } from '@angular/cdk/dialog';
 import { toDo, Column } from '../../models/todo.models';
+import { min } from 'rxjs';
 
 @Component({
   selector: 'app-board',
@@ -23,6 +26,7 @@ import { toDo, Column } from '../../models/todo.models';
 
 })
 export class Board {
+  constructor(public dialog: Dialog) { }
 
   columns: Column[] = [
     {
@@ -78,6 +82,14 @@ export class Board {
     this.columns.push({
       title: "Nueva Columna",
       todos: []
+    });
+  }
+
+  openDialog() {
+    this.dialog.open(DialogComponent, {
+      minWidth: '300px',
+      maxWidth: '50%',
+      autoFocus: false,
     });
   }
 }
