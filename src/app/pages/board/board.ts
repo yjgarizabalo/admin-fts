@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Navbar } from "../../components/navbar/navbar";
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { moveItemInArray, CdkDragDrop } from '@angular/cdk/drag-drop';
-import { toDo } from '../../models/todo.models';
+import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
+import { toDo, Column } from '../../models/todo.models';
 
 @Component({
   selector: 'app-board',
@@ -24,14 +24,60 @@ import { toDo } from '../../models/todo.models';
 })
 export class Board {
 
+  columns: Column[] = [
+    {
+      title: 'To Do',
+      todos: [
+        { id: 1, title: 'Task 1', completed: false },
+        { id: 2, title: 'Task 2', completed: false },
+        { id: 3, title: 'Task 3', completed: false }
+      ]
+    },
+    {
+      title: 'Doing',
+      todos: [
+        { id: 4, title: 'Task 4', completed: false },
+        { id: 5, title: 'Task 5', completed: false }
+      ]
+    },
+    {
+      title: 'Done',
+      todos: [
+        { id: 6, title: 'Task 6', completed: true },
+        { id: 7, title: 'Task 7', completed: true }
+      ]
+    }
+  ];
+
   todos: toDo[] = [
     { id: 1, title: 'Task 1', completed: false },
     { id: 2, title: 'Task 2', completed: false },
     { id: 3, title: 'Task 3', completed: false }
   ];
 
-  drop(event: CdkDragDrop<any[]>) {
-    console.log('Item dropped:', event);
-    moveItemInArray(this.todos, event.previousIndex, event.currentIndex);
+  doing: toDo[] = [
+    { id: 4, title: 'Task 4', completed: false },
+    { id: 5, title: 'Task 5', completed: false }
+  ]
+
+  done: toDo[] = [
+    { id: 6, title: 'Task 6', completed: true },
+    { id: 7, title: 'Task 7', completed: true }
+  ];
+
+  drop(event: CdkDragDrop<toDo[]>) {
+
+    if (event.previousContainer === event.container) {
+      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+    } else {
+      transferArrayItem(event.previousContainer.data, event.container.data, event.previousIndex, event.currentIndex);
+    }
+  }
+
+  addColumn() {
+    this.columns.push({
+      title: "Nueva Columna",
+      todos: []
+    });
   }
 }
