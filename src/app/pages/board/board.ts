@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Navbar } from "../../components/navbar/navbar";
 import { DialogComponent } from "../../components/dialog/dialog";
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Dialog } from '@angular/cdk/dialog';
+import { Dialog, DialogRef } from '@angular/cdk/dialog';
 import { toDo, Column } from '../../models/todo.models';
-import { min } from 'rxjs';
 
 @Component({
   selector: 'app-board',
@@ -85,11 +84,17 @@ export class Board {
     });
   }
 
-  openDialog() {
-    this.dialog.open(DialogComponent, {
+  openDialog(todo: toDo) {
+    const dialogRef = this.dialog.open(DialogComponent, {
       minWidth: '300px',
       maxWidth: '50%',
       autoFocus: false,
+      data: {
+        todo: todo
+      }
+    });
+    dialogRef.closed.subscribe((output: any) => {
+      console.log('Dialog closed', output);
     });
   }
 }
