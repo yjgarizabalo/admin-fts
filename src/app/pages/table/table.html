@@ -1,36 +1,53 @@
 <div class="flex flex-col h-screen">
   <app-navbar></app-navbar>
-  <div class="w-full grow bg-white-600">
-    <table cdk-table [dataSource]="products">
-      <tr cdk-header-row *cdkHeaderRowDef="columns"></tr>
-      <tr cdk-row *cdkRowDef="let row; columns: columns;"></tr>
+  <div class="w-full grow bg-white-600 p-6">
+    <h1 class="text-xl text-gray-700 font-semibold italic mb-5">Tabla </h1>
+    <input type="search" [formControl]="input" class="border border-gray-300 rounded p-2 mb-4 w-full" placeholder="Buscar producto" />
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500" cdk-table [dataSource]="dataSource">
+      <tr cdk-header-row class="text-xs text-gray-700 uppercase bg-gray-50" *cdkHeaderRowDef="columns"></tr>
+      <tr cdk-row [ngClass]="{'bg-red-200': row.price < 100}" *cdkRowDef="let row; columns: columns;"></tr>
+      <tr cdk-footer-row class="text-xl text-gray-700 uppercase bg-gray-200" *cdkFooterRowDef="columns"></tr>
 
       <!-- id -->
       <ng-container cdkColumnDef="N">
-        <th cdk-header-cell *cdkHeaderCellDef>N</th>
-        <td cdk-cell *cdkCellDef="let product">{{ product.id }}</td>
+        <th cdk-header-cell class="py-3 px-6" *cdkHeaderCellDef>N</th>
+        <td cdk-cell class="py-4 px-6"  *cdkCellDef="let product">{{ product.id }}</td>
+        <td cdk-footer-cell class="py-4 px-6" *cdkFooterCellDef></td>
       </ng-container>
 
       <!-- title -->
       <ng-container cdkColumnDef="title">
-        <th cdk-header-cell *cdkHeaderCellDef>Title</th>
+        <th cdk-header-cell class="py-3 px-6" *cdkHeaderCellDef>Title</th>
         <td cdk-cell *cdkCellDef="let product">{{ product.title }}</td>
+        <td cdk-footer-cell class="py-4 px-6" *cdkFooterCellDef></td>
       </ng-container>
 
       <!-- price -->
       <ng-container cdkColumnDef="price">
-        <th cdk-header-cell *cdkHeaderCellDef>Price</th>
-        <td cdk-cell *cdkCellDef="let product">{{ product.price }}</td>
+        <th cdk-header-cell class="py-3 px-6" *cdkHeaderCellDef>Price</th>
+        <td cdk-cell class="py-4 px-6" *cdkCellDef="let product">{{ product.price }}</td>
+        <td cdk-footer-cell class="py-4 px-6" *cdkFooterCellDef>{{ total }}</td>
       </ng-container>
 
       <!-- images -->
       <ng-container cdkColumnDef="images">
-        <th cdk-header-cell *cdkHeaderCellDef>Images</th>
-        <td cdk-cell *cdkCellDef="let product">
+        <th cdk-header-cell class="py-3 px-6" *cdkHeaderCellDef>Images</th>
+        <td cdk-cell class="py-4 px-6" *cdkCellDef="let product">
           <div class="flex">
             <img [src]="product.images[0]" class="w-16 h-16 object-cover mr-2" />
           </div>
         </td>
+        <td cdk-footer-cell class="py-4 px-6" *cdkFooterCellDef></td>
+      </ng-container>
+
+      <!-- actions -->
+      <ng-container cdkColumnDef="actions">
+        <th cdk-header-cell class="py-3 px-6" *cdkHeaderCellDef>Actions</th>
+        <td cdk-cell class="py-4 px-6" *cdkCellDef="let product">
+          <button class="bg-blue-500 text-white px-4 py-2 rounded" (click)="update(product)">Edit</button>
+          <button class="bg-red-500 text-white px-4 py-2 rounded ml-2">Delete</button>
+        </td>
+        <td cdk-footer-cell class="py-4 px-6" *cdkFooterCellDef></td>
       </ng-container>
     </table>
   </div>
